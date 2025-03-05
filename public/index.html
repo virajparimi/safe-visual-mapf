@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="Save-Visual-MAPF, Safe Visual Multi-Agent Path Finding">
+  <meta property="og:title" content="Safe Visual Multi-Agent Path Finding"/>
+  <meta property="og:description" content="Safe Visual Navigation using Goal-Conditioned Safe Reinforcement Learning"/>
+  <meta property="og:url" content="safe-visual-mapf-mers.csail.mit.edu"/>
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/image/mers_logo.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+
+  <meta name="keywords" content="Path Planning for Multiple Mobile Robots or Agents; Multi-Robot Systems; Autonomous Agents; Reinforcement Learning; Safe Reinforcement Learning; Safe Reinforcement Learning; Goal-Conditioned Reinforcement Learning; Planning and Learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>Safe Multi-Agent Navigation guided by Goal-Conditioned Safe Reinforcement Learning</title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+          <div class="title is-1 publication-title">
+            <a href="https://mers.csail.mit.edu/" target="_blank">
+              <img src="static/images/mers_logo.png" alt="MERS" style="width: 100px; vertical-align: middle; margin-right: 10px;">
+            </a>
+            <h1>Safe Multi-Agent Navigation guided by Goal-Conditioned Safe Reinforcement Learning</h1>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <!-- Paper authors -->
+            <span class="author-block">
+              <a href="" target="_blank">Meng Feng</a><sup>*</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://people.csail.mit.edu/vparimi/" target="_blank">Viraj Parimi</a><sup>*</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.csail.mit.edu/person/brian-williams" target="_blank">Brian Williams</a>
+            </span>
+          </div>
+          
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Massachusetts Institute of Technology<br>ICRA 2025<br>NeurIPS '24 IMOL<br>CoRL '24 LEAP</span>
+            <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- Arxiv PDF link -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2502.17813" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+
+              <!-- Github link -->
+              <span class="link-block">
+                <a href="https://gitlab.com/mit-mers/safe-visual-mapf-public.git" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                </a>
+              </span>
+
+              <!-- ArXiv abstract Link -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2502.17813" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Teaser video-->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <div class="item" style="display: flex; flex-direction: column; align-items: center; text-align: center; justify-content: center;">
+        <h1 class="title has-text-centered">
+          High-Level Overview of the Visual Navigation Approach
+        </h1>
+          <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%;">
+          <img src="static/images/visual_navigation_approach_top_down.svg" alt="Top Down Approach" style="width: 45%; margin-bottom: 20px;" />
+          <img src="static/images/visual_navigation_approach.svg" alt="Low-Level Approach" style="width: 45%;" />
+          </div>
+      </div>
+      <br>
+      <h2 class="subtitle has-text-centered">
+        We introduce our novel approach for <font color="#980000"><b>Safe Multi-Agent Visual Navigation</b></font> that fuses traditional planning with safe reinforcement learning to navigation hazardous environments. By leveraging learned value functions, the method constructs and prunes a dynamic graph of waypoints, striking a balance between speed and safety - even for multi-agent systems. This integration not only overcomes long-horizon challenges but also paves the way for efficient, coordinated autonomous navigation in complex settings. 
+      </h2>
+    </div>
+  </div>
+</section>
+<!-- End teaser video -->
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Safe navigation is essential for autonomous systems operating in hazardous environments. Traditional planning methods are effective for solving long-horizon tasks but depend on the availability of a graph representation with predefined distance metrics. In contrast, safe Reinforcement Learning (RL) is capable of learning complex behaviors without relying on manual heuristics but fails to solve long-horizon tasks, particularly in goal-conditioned and multi-agent scenarios.
+            In this paper, we introduce a novel method that integrates the strengths of both planning and safe RL. Our method leverages goal-conditioned RL and safe RL to learn a goal-conditioned policy for navigation while concurrently estimating cumulative distance and safety levels using learned value functions via an automated self-training algorithm. By constructing a graph with states from the replay buffer, our method prunes unsafe edges and generates a waypoint-based plan that the agent then executes by following those waypoints sequentially until their goal locations are reached. This graph pruning and planning approach via the learned value functions allows our approach to flexibly balance the trade-off between faster and safer routes especially over extended horizons.
+            Utilizing this unified high-level graph and a shared low-level goal-conditioned safe RL policy, we extend this approach to address the multi-agent safe navigation problem. In particular, we leverage Conflict-Based Search (CBS) to create waypoint-based plans for multiple agents allowing for their safe navigation over extended horizons. This integration enhances the scalability of goal-conditioned safe RL in multi-agent scenarios, enabling efficient coordination among agents. Extensive benchmarking against state-of-the-art baselines demonstrates the effectiveness of our method in achieving distance goals safely for multiple agents in complex and hazardous environments. Our code will be released to support future research.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+<!-- Image carousel -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item" style="display: flex; flex-direction: column; align-items: center; padding-top: 300px;">
+          <h1 class="title" style="margin-bottom: 20px;">
+            2D Navigation Illustration
+          </h1>
+          <div style="display: flex; justify-content: space-around; width: 100%;">
+            <img src="static/images/pointenv_comparison_together.svg" alt="2D Navigation Comparisons"/>
+          </div>
+          <h2 class="subtitle has-text-centered" style="margin-top: 20px;">
+            In the simple 2D navigation environment with a central obstacle, our approach outperforms the baselines in terms of safety but accumulating the smallest cost. Notice that since the targets of the agents are inside the high-cost regions, the shortest path is very unsafe but our approach is able to understand this and takes a longer and unintuitive path in order to still reach the goal with minimal cost accumulation.
+          </h2>
+        </div>
+        <div class="item" style="display: flex; flex-direction: column; align-items: center; padding-top: 300px">
+          <h1 class="title" style="margin-bottom: 20px;">
+            Single-Agent Visual Navigation Illustration
+          </h1>
+          <div style="display: flex; justify-content: space-around; width: 100%; padding-top: 50px;">
+            <img src="static/images/single_agent_habitatenv_comparison.svg" alt="Visual Navigation Comparison - Single Agent"/>
+          </div>
+          <h2 class="subtitle has-text-centered" style="margin-top: 20px;">
+            Illustrative performance on the Habitat environment with a single agent. Our approach outperforms the baselines in terms of safety and cost accumulation, demonstrating the effectiveness of our method in guiding an agent to its goal safely and efficiently. Notice that our approach is able to stay away from the dresser and the walls and still be able to reach the goal.
+          </h2>
+        </div>
+        <div class="item" style="display: flex; flex-direction: column; align-items: center; padding-top: 300px;">
+          <h1 class="title" style="margin-bottom: 20px;">
+            Multi-Agent Visual Navigation Illustration
+          </h1>
+          <div style="display: flex; justify-content: space-around; width: 100%; padding-top: 50px;">
+            <img src="static/images/multi_agent_habitatenv_comparison.svg" alt="Visual Navigation Comparison - Multi-Agent" />
+          </div>
+          <h2 class="subtitle has-text-centered" style="margin-top: 20px;">
+            Illustrative performance on the Habitat environment with multiple agents. Our approach outperforms the baselines in terms of safety and cost accumulation, demonstrating the effectiveness of our method in guiding multiple agents to their goals safely and efficiently. Notice that our approach is able to coordinate the agents to avoid collisions and reach their goals safely and efficiently.
+          </h2>
+        </div>
+        <div class="item" style="display: flex; flex-direction: column; align-items: center; padding-top: 300px;">
+          <h1 class="title" style="margin-bottom: 20px;">
+            2D Navigation Benchmark
+          </h1>
+          <div style="display: flex; justify-content: space-around; width: 100%; padding-top: 50px;">
+            <img src="static/images/pointenv_table.png" alt="2D Navigation Benchmark" />
+          </div>
+          <h2 class="subtitle has-text-centered" style="margin-top: 20px;">
+            Benchmark performance on the simple 2D navigation environment. Our approach outperforms the baselines by producing safer paths which similar success rates.
+          </h2>
+        </div>
+        <div class="item" style="display: flex; flex-direction: column; align-items: center;">
+          <h1 class="title" style="margin-bottom: 20px;">
+            Multi-Agent Visual Navigation Benchmark
+          </h1>
+          <div style="display: flex; justify-content: space-around; width: 100%; padding-top: 50px;">
+            <img src="static/images/habitatenv_table.png" alt="Visual Navigation Benchmark" />
+          </div>
+          <h2 class="subtitle has-text-centered" style="margin-top: 20px;">
+            Benchmark performance on the Habitat environment. Our approach outperforms the baselines by producing safer paths which similar success rates.
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End image carousel -->
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@misc{feng2025safemultiagentnavigationguided,
+        title={Safe Multi-Agent Navigation guided by Goal-Conditioned Safe Reinforcement Learning}, 
+        author={Meng Feng and Viraj Parimi and Brian Williams},
+        year={2025},
+        eprint={2502.17813},
+        archivePrefix={arXiv},
+        primaryClass={cs.RO},
+        url={https://arxiv.org/abs/2502.17813}, 
+  }</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  <!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+<!-- End of Statcounter Code -->
+</body>
+</html>

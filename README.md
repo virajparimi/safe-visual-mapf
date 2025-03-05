@@ -1,93 +1,173 @@
-# safe-visual-mapf
+# Safe Multi-Agent Navigation Guided by Goal-Conditioned Safe Reinforcement Learning
+
+This repo is for the safe multi-agent visual navigation problem, where given a set of agents starting from given start locations and a map, we compute their safe trajectories to their respective destinations as quickly as possible while only leveraging visual observations like camera inputs. 
 
 
+## Overview of Method
 
-## Getting started
+Safe navigation is essential for autonomous systems operating in hazardous environments. Traditional planning methods are effective for solving long-horizon tasks but depend on the availability of a graph representation with predefined distance metrics. In contrast, safe Reinforcement Learning (RL) is capable of learning complex behaviors without relying on manual heuristics but fails to solve long-horizon tasks, particularly in goal-conditioned and multi-agent scenarios.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+In this paper, we introduce a novel method that integrates the strengths of both planning and safe RL. Our method leverages goal-conditioned RL and safe RL to learn a goal-conditioned policy for navigation while concurrently estimating cumulative distance and safety levels using learned value functions via an automated self-training algorithm. By constructing a graph with states from the replay buffer, our method prunes unsafe edges and generates a waypoint-based plan that the agent then executes by following those waypoints sequentially until their goal locations are reached. This graph pruning and planning approach via the learned value functions allows our approach to flexibly balance the trade-off between faster and safer routes especially over extended horizons.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Utilizing this unified high-level graph and a shared low-level goal-conditioned safe RL policy, we extend this approach to address the multi-agent safe navigation problem. In particular, we leverage Conflict-Based Search (CBS) to create waypoint-based plans for multiple agents allowing for their safe navigation over extended horizons. This integration enhances the scalability of goal-conditioned safe RL in multi-agent scenarios, enabling efficient coordination among agents. Extensive benchmarking against state-of-the-art baselines demonstrates the effectiveness of our method in achieving distance goals safely for multiple agents in complex and hazardous environments. Our code will be released to support future research.
 
-## Add your files
+## Requirements
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.com/mit-mers/safe-visual-mapf.git
-git branch -M main
-git push -uf origin main
+```sh
+conda env create -f environment.yml
 ```
 
-## Integrate with your tools
+## Installing habitat-sim
+### Download (testing) 3D scenes
+```bash
+python -m habitat_sim.utils.datasets_download --uids habitat_test_scenes --data-path /path/to/data/
+```
+### Download example objects
+```bash
+python -m habitat_sim.utils.datasets_download --uids habitat_example_objects --data-path /path/to/data/
+```
+### Setup Replica CAD (Not Replica Dataset)
+Replica CAD is a simpler and painless version of Replica Dataset. Replica Dataset may have been deprecated: see [Github Issue](https://github.com/facebookresearch/habitat-sim/issues/2335)
+```bash
+sudo apt install git-lfs
+target_dir=external_data/replica_cad
+GIT_CLONE_PROTECTION_ACTIVE=false python -m habitat_sim.utils.datasets_download --uids replica_cad_dataset replica_cad_baked_lighting --data-path $target_dir
+```
+Verify it is working with interactive viewer
+```bash
+habitat-viewer --dataset ${target_dir}/replica_cad_baked_lighting/replicaCAD_baked.scene_dataset_config.json -- sc1_staging_00
+```
 
-- [ ] [Set up project integrations](https://gitlab.com/mit-mers/safe-visual-mapf/-/settings/integrations)
 
-## Collaborate with your team
+## Train with Visual Inputs
+```bash
+sbatch launch_jobs/cloud_debug_vec_habitat.sh # On MIT supercloud GPU node
+bash launch_jobs/local_debug_vec_habitat.sh # Locally, may not work due to memory limit
+```
+**Important**: The base SORB algorithm is sensitive to random seeds. This is undocumented in the original SORB paper. Consequently, training with vectorized env will not converge. Make sure to set the num_envs to 1 in vec training. In addition, the replay buffer size seems to matter as well. Currently, only training on MIT Supercloud with a experience replay buffer size of 100K has been proven to work.  
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+## Experiments
 
-## Test and Deploy
 
-Use the built-in continuous integration in GitLab.
+## You may design custom evaluation problems for illustration
+**Step 1**: Generate a figure of the 2D maze
+**Step 2**: Load the image into [WebPlotDigitizer](https://apps.automeris.io/wpd/), manually align the x and y axes by selecting the start and end points. 
+**Step 3**: Pick the start and goal positions from the figure, click "View Data" button, copy the coords to a new file under [illustration_set](pud/envs/safe_pointenv/illustration_set) illustration following the specification [here](pud/envs/safe_pointenv/illustration_set/README.md).
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## Coordinate Convention for 2D Maze
 
-***
+The maze is defined in numpy array. For example:
+```python
+L = np.array([[0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 1, 0, 0, 0, 0],
+              [0, 0, 1, 0, 0, 0, 0],
+              [0, 0, 1, 0, 0, 0, 0],
+              [0, 0, 1, 1, 1, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0]])
+```
 
-# Editing this README
+However, the visualization of this maze via matplotlib will display an L in a different orientation (e.g., CCW 90 deg). 
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+<img src="readme_resources/L.jpg" alt="Visualized L Maze with selected points" width="300">
 
-## Suggestions for a good README
+In our case, we don't bother with it. If we really want to have the L shape in the vertical standup orientation, we change the maze definition in numpy array and rotate it CW 90 deg. The reason is to make the coordinates of visualization and points picked from visualization consistent with the internal maze coordinates. Although they look different due to different representation pipeline, they are internally the same thing. This makes it easy to manually craft benchmark problems by selecting start and goal coordinates from the maze image (e.g., the dots and lines on the image above).
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+For detailed example and visualization, read [experiment slides](readme_resources/experiment_slides.pptx). 
+Example code: [test_plot_orientation.py](pud/envs/safe_pointenv/unit_tests/test_plot_orientation.py).
 
-## Name
-Choose a self-explaining name for your project.
+## Coordinate Convention for Visual Navigation (Habitats ReplicaCAD)
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Again, we ignore any orientation discrepancy between the numpy array and visualization. The points taken from the visualization can be used as internal states without additional transformation.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Example code: [vis_handed_crafted_waypoints_w_topdown_maps in test_replica_cad_barebone.py](pud/envs/safe_habitatenv/unit_tests/test_replica_cad_barebone.py)
+Video proof of matching coordinate: [trace_bounds.mp4 -- Trace map bounds by manual point selection](readme_resources/trace_bounds.mp4)
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Setup on Supercloud
+Habitat only works on GPU nodes. The setup process, however, takes place on the initial login node without access to GPU. Load the necessary module to install cuda-enabled pytorch without access to GPU/CUDA.
+```bash
+module load anaconda/2023a-pytorch
+module load cuda/11.8
+module load nccl/2.18.1-cuda11.8
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Installation on Supercloud requires creating a custom conda environment. Note this will reduce the I/O speed because the user space locates on network drive. 
+```bash
+conda env create -f environment.yml
+source activate safe_visual_mapf
+```
+Setup of ReplicadCAD follows the same procedure as above.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## Experimental Design
+see [slides](readme_resources/experiment_slides.pptx)
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+## Visualize trained policy (2D maze)
+Select or create an illustration problem set from [pud/envs/safe_pointenv/illustration_set](pud/envs/safe_pointenv/illustration_set) following the file specification rule. 
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Also choose 
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+- Trained policy ckpt file
+- Configuration file (.yaml) used for training that ckpt
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+```bash
+bash launch_jobs/local_illustration_eval.sh
+```
+**Example output**: 
+<p align="center">
+<img src="readme_resources/illustration_problem_2d_maze_unconstrained.jpg" alt="Illustration problem in 2D maze" width="500">
+</p>
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## Experimental Reproduction
 
-## License
-For open source projects, say how it is licensed.
+To reproduce the results as described in the paper, please follow these instructions
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+1. Download the codebase
+2. Export the python path and point it to the root directory of this codebase
+```sh
+export PYTHONPATH=/path/to/codebase
+```
+3. Download the models inside the base directory by clicking the following [link](https://nas.mers.csail.mit.edu/sharing/dzVKC2O83)
+    - Unzip the models
+        ```sh
+        unzip models.zip
+        ```
+4. Run the python illustration notebooks provided in `pud/plots/` to re-generate the plots in the paper
+    - Use `plot_pointenv_illustration.ipynb` for 2D Navigation related experiments
+    - Use `plot_habitat_illustration.ipynb` for Visual Navigation related experiments
+5. Benchmark the approach on different problems
+    - Ensure that the script is executable
+        ```sh
+            chmod u+x pud/plots/collect_all_trajs.sh
+        ```
+    - Generate your own problems
+        ```sh
+        pud/plots/collect_all_trajs.sh <env_name> <config_path> <unconstrained_ckpt_path> <constrained_ckpt_path> true 
+        ```
+    - Collect the new trajectories corresponding to the new problems
+        ```sh
+            pud/plots/collect_all_trajs.sh <env_name> <config_path> <unconstrained_ckpt_path> <constrained_ckpt_path>
+        ```
+6. Run the python metrics notebooks provided in `pud/plots/` to re-generate the data used for tables in the paper. Note that you will need to 
+    a. Use `plot_pointenv_metrics.ipynb` for 2D Navigation related experiments
+    b. Use `plot_habitat_metrics.ipynb` for Visual Navigation related experiments
+7. To use the same data that was use to generate the results in the paper, simply download that data using the following [link](https://nas.mers.csail.mit.edu/sharing/nJ0UcyTNu)
+    - Unzip the data inside `pud/plots/` directory
+        ```sh
+        unzip data.zip -d /path/to/pud/plots/
+        ```
+    Rerun Step 6.
+
+## Extra Notes:
+1. The launch scripts can be found in the `launch_jobs/` directory
+2. You may visualize individual steps of the approach using the scripts inside `pud/visualizers/` directory
+    a. Use `gen_graph.py` for 2D Navigation problems
+    b. Use `gen_visual_nav_graph.py` for Visual Navigation problems
+
+
+## Results
+### 2D Navigation
+<img src="pud/plots/figures/paper/pointenv_comparison_together.svg" alt="Visualized 2D Navigation results">
+
+### Visual Navigation
+<img src="pud/plots/figures/paper/multi_agent_habitatenv_comparison.svg" alt="Visualized 2D Navigation results">
