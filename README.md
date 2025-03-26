@@ -38,6 +38,10 @@ Verify it is working with interactive viewer
 habitat-viewer --dataset ${target_dir}/replica_cad_baked_lighting/replicaCAD_baked.scene_dataset_config.json -- sc1_staging_00
 ```
 
+Before you run any code ensure that the repository root is added to your PYTHONPATH,
+```bash
+export PYTHONPATH="{PYTHONPATH}:/path/to/safe-visual-mapf"
+```
 
 ## Train with Visual Inputs
 ```bash
@@ -149,8 +153,8 @@ export PYTHONPATH=/path/to/codebase
             pud/plots/collect_all_trajs.sh <env_name> <config_path> <unconstrained_ckpt_path> <constrained_ckpt_path>
         ```
 6. Run the python metrics notebooks provided in `pud/plots/` to re-generate the data used for tables in the paper. Note that you will need to 
-    a. Use `plot_pointenv_metrics.ipynb` for 2D Navigation related experiments
-    b. Use `plot_habitat_metrics.ipynb` for Visual Navigation related experiments
+    - Use `plot_pointenv_metrics.ipynb` for 2D Navigation related experiments
+    - Use `plot_habitat_metrics.ipynb` for Visual Navigation related experiments
 7. To use the same data that was use to generate the results in the paper, simply download that data using the following [link](https://nas.mers.csail.mit.edu/sharing/nJ0UcyTNu)
     - Unzip the data inside `pud/plots/` directory
         ```sh
@@ -161,8 +165,8 @@ export PYTHONPATH=/path/to/codebase
 ## Extra Notes:
 1. The launch scripts can be found in the `launch_jobs/` directory
 2. You may visualize individual steps of the approach using the scripts inside `pud/visualizers/` directory
-    a. Use `gen_graph.py` for 2D Navigation problems
-    b. Use `gen_visual_nav_graph.py` for Visual Navigation problems
+    - Use `gen_graph.py` for 2D Navigation problems
+    - Use `gen_visual_nav_graph.py` for Visual Navigation problems
 
 
 ## Results
