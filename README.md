@@ -1,7 +1,7 @@
 # Safe Multi-Agent Navigation Guided by Goal-Conditioned Safe Reinforcement Learning
 
 [Meng Feng](https://www.amazon.science/author/meng-feng), [Viraj Parimi](https://people.csail.mit.edu/vparimi/), [Brian Williams](https://www.csail.mit.edu/person/brian-williams)  
-Massachusetts Institute of Technology  
+Massachusetts Institute of Technology 
 **[ICRA 2025](https://2025.ieee-icra.org/)**
 
 **Project:** [safe-visual-mapf-mers.csail.mit.edu](https://safe-visual-mapf-mers.csail.mit.edu/) • **Paper:** [arXiv:2502.17813](https://arxiv.org/abs/2502.17813)
