@@ -1,5 +1,11 @@
 # Safe Multi-Agent Navigation Guided by Goal-Conditioned Safe Reinforcement Learning
 
+[Meng Feng](https://www.amazon.science/author/meng-feng), [Viraj Parimi](https://people.csail.mit.edu/vparimi/), [Brian Williams](https://www.csail.mit.edu/person/brian-williams)  
+Massachusetts Institute of Technology  
+**[ICRA 2025](https://2025.ieee-icra.org/)**
+
+**Project:** [safe-visual-mapf-mers.csail.mit.edu](https://safe-visual-mapf-mers.csail.mit.edu/) • **Paper:** [arXiv:2502.17813](https://arxiv.org/abs/2502.17813)
+
 This repo is for the safe multi-agent visual navigation problem, where given a set of agents starting from given start locations and a map, we compute their safe trajectories to their respective destinations as quickly as possible while only leveraging visual observations like camera inputs. 
 
 
