@@ -182,3 +182,20 @@ export PYTHONPATH=/path/to/codebase
 
 ### Visual Navigation
 <img src="pud/plots/figures/paper/multi_agent_habitatenv_comparison.svg" alt="Visualized 2D Navigation results">
+
+## Citation
+If you use our work or codebase in your research, please cite our paper.
+```bibtex
+@INPROCEEDINGS{11127461,
+  author={Feng, Meng and Parimi, Viraj and Williams, Brian},
+  booktitle={2025 IEEE International Conference on Robotics and Automation (ICRA)}, 
+  title={Safe Multi-Agent Navigation Guided by Goal-Conditioned Safe Reinforcement Learning}, 
+  year={2025},
+  volume={},
+  number={},
+  pages={16869-16875},
+  keywords={Training;Visualization;Navigation;Scalability;Heuristic algorithms;Reinforcement learning;Manuals;Distance measurement;Planning;Safety},
+  doi={10.1109/ICRA55743.2025.11127461}
+}
+```
+
